@@ -1,19 +1,31 @@
 {
-  "name": "ex-twitter-clone",
+  "name": "ex-contact-management",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
+    "antd": "^4.5.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3"
   },
+  "devDependencies": {
+    "@ant-design/icons": "^4.2.2",
+    "@craco/craco": "^5.6.4",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "babel-plugin-import": "^1.13.0",
+    "craco-less": "^1.17.0",
+    "css-loader": "^4.2.1",
+    "customize-cra": "^1.0.0",
+    "less": "^3.12.2",
+    "less-loader": "^6.2.0",
+    "cz-customizable": "^6.2.1"
+  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -30,5 +42,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": "commitizen.js"
+    }
   }
 }
