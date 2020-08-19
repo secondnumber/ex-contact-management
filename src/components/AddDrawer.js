@@ -12,7 +12,6 @@ const AddDrawer = ({show, handleOnClose, handleAddFormOnFinish, handleAddFormOnF
         visible={show}
         onClose={handleOnClose}
         maskClosable={true}>
-        <h1>Content Here</h1>
         <FormForContacts onFinish={handleAddFormOnFinish} onFinishFailed={handleAddFormOnFinishFailed}/>
     </Drawer>
   );

@@ -1,9 +1,17 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Form, Input, Button, Checkbox } from 'antd';
 import PropTypes from "prop-types";
 
 const FormForContacts = ({onFinish, onFinishFailed}) => {
-    const initialValues = {firstName: '', lastName: '', phoneNumber: ''};
+    const [form] = Form.useForm();
+    const [, forceUpdate] = useState();
+
+    // To disable submit button at the beginning.
+    useEffect(() => {
+        forceUpdate({});
+    }, []);
+
+    const initialValues = {firstName: '', lastName: '', phoneNumber: null};
 
     const layout = {
         labelCol: { span: 8 },
@@ -16,6 +24,7 @@ const FormForContacts = ({onFinish, onFinishFailed}) => {
   return (
       <Form
           {...layout}
+          form={form}
           name="basic"
           initialValues={initialValues}
           onFinish={onFinish}
@@ -45,14 +54,19 @@ const FormForContacts = ({onFinish, onFinishFailed}) => {
               <Input type="tel" />
           </Form.Item>
 
-          <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-              <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-
-          <Form.Item {...tailLayout}>
-              <Button type="primary" htmlType="submit">
-                  Submit
-              </Button>
+          <Form.Item {...tailLayout} shouldUpdate={true}>
+              {() => (
+                  <Button
+                      type="primary"
+                      htmlType="submit"
+                      disabled={
+                          !form.isFieldsTouched(true) ||
+                          form.getFieldsError().filter(({ errors }) => errors.length).length
+                      }
+                  >
+                      Add
+                  </Button>
+              )}
           </Form.Item>
       </Form>
   );
