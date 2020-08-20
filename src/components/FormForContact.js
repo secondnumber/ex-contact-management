@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import { Form, Input, Button, Checkbox } from 'antd';
 import PropTypes from "prop-types";
 
@@ -13,17 +13,9 @@ const FormForContacts = ({onFinish, onFinishFailed}) => {
 
     const initialValues = {firstName: '', lastName: '', phoneNumber: null};
 
-    const layout = {
-        labelCol: { span: 8 },
-        wrapperCol: { span: 16 },
-    };
-    const tailLayout = {
-        wrapperCol: { offset: 8, span: 16 },
-    };
-
   return (
       <Form
-          {...layout}
+          layout='vertical'
           form={form}
           name="basic"
           initialValues={initialValues}
@@ -54,20 +46,28 @@ const FormForContacts = ({onFinish, onFinishFailed}) => {
               <Input type="tel" />
           </Form.Item>
 
-          <Form.Item {...tailLayout} shouldUpdate={true}>
+          <Form.Item shouldUpdate>
               {() => (
-                  <Button
-                      type="primary"
-                      htmlType="submit"
-                      disabled={
-                          !form.isFieldsTouched(true) ||
-                          form.getFieldsError().filter(({ errors }) => errors.length).length
-                      }
-                  >
-                      Add
-                  </Button>
+                  <Fragment>
+                      <Button
+                          style={{marginRight: 20}}
+                          type="primary"
+                          htmlType="submit"
+                          disabled={
+                              !form.isFieldsTouched(true) ||
+                              form.getFieldsError().filter(({ errors }) => errors.length).length
+                          }
+                      >
+                          Add
+                      </Button>
+                      <Button type="secondary" htmlType="button"
+                              onClick={() => form.resetFields()}>
+                          Reset
+                      </Button>
+                  </Fragment>
               )}
           </Form.Item>
+
       </Form>
   );
 };
