@@ -1,29 +1,22 @@
 import React, {Fragment, useState} from 'react';
-import {Button, Layout, Table, Menu, Breadcrumb} from 'antd';
-import {
-    PlusCircleFilled,
-    DesktopOutlined,
-    PieChartOutlined,
-    FileOutlined,
-    TeamOutlined,
-    UserOutlined,
-} from '@ant-design/icons';
+import {Button, Layout, Table, Menu, Space} from 'antd';
+import { PlusCircleFilled, DeleteOutlined } from '@ant-design/icons';
 import './App.less';
 import AddDrawer from "./components/AddDrawer";
+import {connect} from "react-redux";
+import {addContact, deleteContact} from "./redux/actions";
 
-const App = () => {
+const App = ({contacts, allContacts, addContact, deleteContact}) => {
     const [showDrawer, setShowDrawer] = useState(false);
-    const [values, setValues] = useState([]);
     const [errorInfo, setErrorInfo] = useState({});
     const [collapsed, setCollapsed] = useState(false);
 
     const handleAddFormOnFinish = (data) => {
-        setValues([...values, {
-            key: values.length + 1,
+        addContact({
             ...data,
-        }]);
+            key: data.phoneNumber
+        });
         setShowDrawer(false);
-        console.log(values);
     };
     const handleAddFormOnFinishFailed = (errorInfo) => {
         setErrorInfo(errorInfo);
@@ -55,38 +48,21 @@ const App = () => {
             dataIndex: 'phoneNumber',
             key: 'phoneNumber',
         },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (text, record) => <span><Button onClick={() => {deleteContact(record.key)}} icon={<DeleteOutlined/>}/></span>,
+        },
     ];
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
                 <div className="logo" />
-                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-                    <Menu.Item key="1" icon={<PieChartOutlined />}>
-                        Option 1
-                    </Menu.Item>
-                    <Menu.Item key="2" icon={<DesktopOutlined />}>
-                        Option 2
-                    </Menu.Item>
-                    <SubMenu key="sub1" icon={<UserOutlined />} title="User">
-                        <Menu.Item key="3">Tom</Menu.Item>
-                        <Menu.Item key="4">Bill</Menu.Item>
-                        <Menu.Item key="5">Alex</Menu.Item>
-                    </SubMenu>
-                    <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
-                        <Menu.Item key="6">Team 1</Menu.Item>
-                        <Menu.Item key="8">Team 2</Menu.Item>
-                    </SubMenu>
-                    <Menu.Item key="9" icon={<FileOutlined />} />
-                </Menu>
             </Sider>
             <Layout className="site-layout">
                 <Header style={{ padding: 0, background: '#fff' }} />
                 <Content style={{ margin: '0 16px' }}>
-                    <Breadcrumb style={{ margin: '16px 0' }}>
-                        <Breadcrumb.Item>User</Breadcrumb.Item>
-                        <Breadcrumb.Item>Bill</Breadcrumb.Item>
-                    </Breadcrumb>
                     <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
                         <Fragment>
                             <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 20}}>
@@ -102,7 +78,7 @@ const App = () => {
                                 </Button></div>
                             </div>
                             <Layout.Content>
-                                <Table dataSource={values} columns={columns} />;
+                                <Table dataSource={allContacts} columns={columns} />
                             </Layout.Content>
                             <AddDrawer
                                 show={showDrawer}
@@ -120,4 +96,9 @@ const App = () => {
     )
 };
 
-export default App;
+const mapStateToProps = (state) => ({
+    contacts: state.contacts,
+    allContacts: state.contacts.allContacts
+});
+
+export default connect(mapStateToProps, {addContact, deleteContact})(App);
